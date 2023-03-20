@@ -14,23 +14,26 @@ const Symbols = [
   'https://assets-lighthouse.alphacamp.co/uploads/image/file/17988/__.png' // 梅花
 ]
 
-
 const view = {
   getCardElement(index) {
     return `<div data-index="${index}" class="card back"></div>`
   },
 
-
+  
   getCardContent(index) {
+    // 取得牌卡上的數字
     const number = this.transformNumber((index % 13) + 1)
+    // 取得牌卡上的符號（黑桃、菱形、紅心、梅花） 
     const symbol = Symbols[Math.floor(index / 13)]
 
+    // 取得牌卡的html
     return `<p>${number}</p>
       <img src="${symbol}" alt="">
       <p>${number}</p>`
   },
 
 
+//   特殊數字（A、J、Q、K）的辨識
   transformNumber(number) {
     switch (number) {
       case 1:
@@ -47,6 +50,7 @@ const view = {
   },
 
 
+//   顯示卡牌
   displayCards(indexes) {
     const rootElement = document.querySelector('#cards')
     rootElement.innerHTML = indexes.map(index => this.getCardElement(index)).join("")
@@ -66,20 +70,25 @@ const view = {
     })
   },
 
+  
+//   配對到的卡牌，在class加上paired，使它可以改變樣式。
   pairCards(...cards) {
     cards.map(card => {
       card.classList.add('paired')
     })
   },
 
+//   顯示分數
   renderScore(score) {
     document.querySelector('.score').textContent = `Score: ${score}`
   },
 
+//   顯示試了幾次
   renderTriedTimes(times) {
     document.querySelector('.tried').textContent = `You've tried: ${times} times`
   },
 
+//   配對錯誤加上閃爍動畫
   appendWrongAnimation(...cards) {
     cards.map(card => {
       card.classList.add('wrong')
@@ -89,6 +98,7 @@ const view = {
     })
   },
 
+//   顯示遊戲結束畫面
   showGameFinished() {
     const div = document.createElement('div')
     div.classList.add('complete')
@@ -104,6 +114,7 @@ const view = {
 
 
 const model = {
+//   現在正翻的卡牌，用一個陣列裝起來，方便後續比較。
   revealedCards: [],
 
   isRevealedCardsMatched() {
